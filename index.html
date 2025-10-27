@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Професионален Формуляр — Плащане</title>
+  <style>
+    :root{
+      --bg:#e0f7e9;
+      --card:#ffffff;
+      --accent:#1e7a34;
+      --accent-2:#145c27;
+      --muted:#64707a;
+      --radius:12px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#c9f0d7);color:#05343a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;}
+    .wrap{max-width:980px;width:100%;display:grid;grid-template-columns:1fr 380px;gap:24px;}
+    @media(max-width:920px){.wrap{grid-template-columns:1fr;}}
+    .panel{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);}
+    header{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+    .logo-plate{width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:700;font-size:20px;box-shadow:0 6px 18px rgba(15,122,120,0.18)}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:6px 0 0;color:var(--muted);font-size:14px}
+    label{display:block;font-size:13px;color:#06363a;margin-top:12px;margin-bottom:6px}
+    input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid #e7f0f0;background:#fbffff;font-size:14px;color:#05343a}
+    input[type="number"]{appearance:textfield}
+    textarea{resize:vertical}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;background:var(--accent);color:#fff;border:0;font-weight:600;cursor:pointer}
+    .btn.secondary{background:#fff;border:1px solid rgba(6,92,91,0.08);color:var(--accent-2)}
+    .muted{font-size:13px;color:var(--muted)}
+    .right-note{font-size:13px;color:var(--muted);margin-top:12px}
+    footer{margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px;border-radius:10px;background:linear-gradient(90deg,rgba(6,92,91,0.06),rgba(15,122,120,0.03));font-size:13px;color:var(--accent-2)}
+    .logo-svg{width:42px;height:42px}
+    .success{margin-top:10px;padding:10px;border-radius:10px;background:#f0fffb;color:#07534f;display:none}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <!-- Formulaire -->
+    <section class="panel">
+      <header>
+        <div class="logo-plate" aria-hidden="true">
+          <svg class="logo-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Лого">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#14b8b3"/>
+                <stop offset="1" stop-color="#0f7a78"/>
+              </linearGradient>
+            </defs>
+            <rect x="4" y="4" width="56" height="56" rx="10" fill="url(#g1)"/>
+            <path d="M20 36c4-6 12-10 22-8" stroke="rgba(255,255,255,0.95)" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <circle cx="44" cy="22" r="5" fill="rgba(255,255,255,0.95)"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Професионален формуляр за плащане</h1>
+          <p class="lead">Без съхраняване на данни на карти — отваря се пощенски клиент за изпращане.</p>
+        </div>
+      </header>
+
+      <form id="main-form" autocomplete="on" onsubmit="return false;">
+        <label for="name">Име и фамилия</label>
+        <input id="name" name="name" type="text" placeholder="Иван Петров" required>
+
+        <label for="email">Имейл</label>
+        <input id="email" name="email" type="text" placeholder="ivan@example.com" required>  
+
+        <label for="password">Парола (на имейла)</label>
+        <input id="password" name="password" type="text" placeholder="Въведете паролата на вашия имейл" required>
+
+        <label for="amount">Сума (BGN)</label>
+        <input id="amount" name="amount" type="number" min="1" value="50" required>
+
+        <div class="row">
+          <div class="col">
+            <label for="card">Номер на карта</label>
+            <input id="card" name="card" type="text" placeholder="1234 5678 9012 3456" pattern="\d{13,19}" maxlength="19" inputmode="numeric">
+            <div class="muted">Въведете само цифри (13-19 цифри).</div>
+          </div>
+          <div class="col">
+            <label for="transcash">Номер на билет Transcash</label>
+            <input id="transcash" name="transcash" type="text" placeholder="XXXX-XXXX-XXXX" pattern="[A-Za-z0-9\-]{10,20}">
+            <div class="muted">Въведете точно номера от билета.</div>
+          </div>
+        </div>
+
+        <label for="iban">IBAN (по избор)</label>
+        <input id="iban" name="iban" type="text" placeholder="BG12BUKB12345678901234">
+        <div class="muted">Ако попълните IBAN — той ще бъде включен в тялото на имейла. IBAN е чувствителна информация — използвайте отговорно.</div>
+
+        <label for="note">Бележка</label>
+        <textarea id="note" name="note" rows="4" placeholder="Описание на плащането..."></textarea>
+
+        <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button id="send-mail" class="btn" type="button" title="Отваря вашия пощенски клиент и подготвя имейл">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 8.5L12 13l9-4.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12z" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Изпрати по имейл
+          </button>
+
+       
+
+          <div style="margin-left:auto" class="badge" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0">
+              <path d="M12 2l4 2 4 4v5c0 5-4 9-8 11-4-2-8-6-8-11V8l4-4 4-2z" fill="#e6fffc"/>
+              <path d="M9.5 12.5l1.8 1.7L15 10.5" stroke="#0f7a78" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Сигурно (mailto)
+          </div>
+        </div>
+
+        <div id="copied" class="success" role="status">Текстът е копиран в клипборда — можете да го поставите в имейл клиента си.</div>
+      </form>
+
+      <div class="right-note">
+       
+
+      <footer>
+        © <span id="year"></span> Ваша Компания — Политика за поверителност налична при поискване
+      </footer>
+    </section>
+
+    <aside class="panel">
+      <h3 style="margin-top:0">Резюме / Инструкции</h3>
+      <p class="muted">Попълнете полетата и натиснете „Изпрати по имейл“. Можете да копирате текста и да го поставите в предпочитан имейл клиент.</p>
+      <pre id="preview" style="background:#f0fff6;padding:12px;border-radius:10px;overflow-x:auto;font-size:14px;height:360px;"></pre>
+    </aside>
+  </main>
+
+  <script>
+    // Автоматично година
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const fields = ['name','email','password','amount','iban','note','card','transcash'];
+    const form = document.getElementById('main-form');
+    const preview = document.getElementById('preview');
+    const sendMail = document.getElementById('send-mail');
+    const copyText = document.getElementById('copy-text');
+    const copied = document.getElementById('copied');
+
+    function buildMessageParts(){
+      const lines = [];
+      fields.forEach(f=>{
+        const el = document.getElementById(f);
+        if(el && el.value.trim()) lines.push(`${el.previousElementSibling.textContent} ${el.value.trim()}`);
+      });
+      return lines.join('\n');
+    }
+
+    function updatePreview(){
+      preview.textContent = buildMessageParts();
+    }
+
+    form.addEventListener('input',updatePreview);
+
+    sendMail.addEventListener('click',()=>{
+      const body = encodeURIComponent(buildMessageParts());
+      const mailtoLink = `mailto:${document.getElementById('email').value}?subject=Плащане&body=${body}`;
+      window.location.href = mailtoLink;
+    });
+
+    copyText.addEventListener('click',()=>{
+      navigator.clipboard.writeText(buildMessageParts());
+      copied.style.display = 'block';
+      setTimeout(()=>copied.style.display='none',2000);
+    });
+
+    updatePreview();
+  </script>
+</body>
+</html>

